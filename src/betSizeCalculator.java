@@ -55,7 +55,7 @@ public class betSizeCalculator extends JPanel implements PropertyChangeListener{
     {
         super(new BorderLayout());
         setUpFormats();
-        int optimumBet = computeOptimumBet(probability,
+        double optimumBet = computeOptimumBet(probability,
                                         target,stop,accountSize,
                                         equityPrice);
 
@@ -202,10 +202,16 @@ public class betSizeCalculator extends JPanel implements PropertyChangeListener{
         optimumBetFormat = NumberFormat.getNumberInstance();
     }
 
-	private int computeOptimumBet(double prob,double target, double stop,  double acct, double price)
+	private double computeOptimumBet(double prob,double target, double stop,  double acct, double price)
 	{
 		if((target>price && stop>price) || (target<price && stop<price) || (price==stop) || (target == price) || (price==0)){
 			return 0;
+		}
+		if(probability >=1){
+			if(target>stop)
+				return Double.POSITIVE_INFINITY;
+			else
+				return Double.NEGATIVE_INFINITY;
 		}
 		
 		double payout = (target-price)/(price-stop);
